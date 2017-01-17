@@ -36,12 +36,18 @@ public class Main {
 
     public static void calculate (int disks, int diskID, int [][] towers) {
         boolean incomplete = true;
-        System.out.println(empty(0, towers)); // should be false
-        System.out.println(empty(1, towers)); // should be true
+        int step = 1;
         while (incomplete) {
+
+            towers = Move.moveDisk(towers, step);
+
+            // Everything before evaluating whether the task is complete or not.
+
             if (empty(0, towers) && empty(1, towers) && !empty(2, towers)) {
                 incomplete = false;
             }
+            System.out.println(step + ") ");
+            step++;
         }
     }
 
