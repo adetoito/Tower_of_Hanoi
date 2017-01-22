@@ -21,6 +21,6 @@ public class Main {
         }
         int diskID = disks;
         Towers game = new Towers(disks, diskID);
-        game.solve(1);
+        game.solve(1, 1);
     }
 }

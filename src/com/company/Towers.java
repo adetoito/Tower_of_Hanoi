@@ -22,32 +22,110 @@ public class Towers {
     // 1 - Tower B
     // 2 - Tower C
 
-    public void solve (int step) {
+    public void solve (int step, int cycle) {
         int diskID;
         if (step == 1) {
             if (numDisks % 2 == 0) { // if even
                 diskID = locateTopDiskID(0);
-                moveDisk(diskID, 0, 2);
-                System.out.println("(1) Move one disk from Tower 1 to Tower 3.");
-            } else {
-                diskID = locateTopDiskID(0);
                 moveDisk(diskID, 0, 1);
                 System.out.println("(1) Move one disk from Tower 1 to Tower 2.");
+            } else {
+                diskID = locateTopDiskID(0);
+                moveDisk(diskID, 0, 2);
+                System.out.println("(1) Move one disk from Tower 1 to Tower 3.");
             }
             step++;
-            solve(step);
+            solve(step, cycle);
         } else {
             if (!empty(0) && !empty(1) && empty(2)) {
                 if (numDisks % 2 == 0) { // if even
-
-                } else {
-
+                    if (step - (cycle * 3) == 1) {
+                        if (legal(0, 1)) {
+                            diskID = locateTopDiskID(0);
+                            moveDisk(diskID, 0, 1);
+                            System.out.println("(" + step + ") Move one disk from Tower 1 to Tower 2.");
+                        } else {
+                            diskID = locateTopDiskID(1);
+                            moveDisk(diskID, 1, 0);
+                            System.out.println("(" + step + ") Move one disk from Tower 2 to Tower 1.");
+                        }
+                    } else if (step - (cycle * 3) == 2) {
+                        if (legal(0, 2)) {
+                            diskID = locateTopDiskID(0);
+                            moveDisk(diskID, 0, 2);
+                            System.out.println("(" + step + ") Move one disk from Tower 1 to Tower 3.");
+                        } else {
+                            diskID = locateTopDiskID(2);
+                            moveDisk(diskID, 2, 0);
+                            System.out.println("(" + step + ") Move one disk from Tower 3 to Tower 1.");
+                        }
+                    } else {
+                        if (legal(1, 2)) {
+                            diskID = locateTopDiskID(1);
+                            moveDisk(diskID, 1, 2);
+                            System.out.println("(" + step + ") Move one disk from Tower 2 to Tower 3.");
+                        } else {
+                            diskID = locateTopDiskID(2);
+                            moveDisk(diskID, 2, 1);
+                            System.out.println("(" + step + ") Move one disk from Tower 3 to Tower 2.");
+                        }
+                        cycle++;
+                    }
+                } else { // if odd
+                    if (step - (cycle * 3) == 1) {
+                        if (legal(0, 2)) {
+                            diskID = locateTopDiskID(0);
+                            moveDisk(diskID, 0, 2);
+                            System.out.println("(" + step + ") Move one disk from Tower 1 to Tower 3.");
+                        } else {
+                            diskID = locateTopDiskID(2);
+                            moveDisk(diskID, 2, 0);
+                            System.out.println("(" + step + ") Move one disk from Tower 3 to Tower 1.");
+                        }
+                    } else if (step - (cycle * 3) == 2) {
+                        if (legal(0, 1)) {
+                            diskID = locateTopDiskID(0);
+                            moveDisk(diskID, 0, 1);
+                            System.out.println("(" + step + ") Move one disk from Tower 1 to Tower 2.");
+                        } else {
+                            diskID = locateTopDiskID(1);
+                            moveDisk(diskID, 1, 0);
+                            System.out.println("(" + step + ") Move one disk from Tower 2 to Tower 1.");
+                        }
+                    } else {
+                        if (legal(2, 1)) {
+                            diskID = locateTopDiskID(2);
+                            moveDisk(diskID, 2, 1);
+                            System.out.println("(" + step + ") Move one disk from Tower 3 to Tower 2.");
+                        } else {
+                            diskID = locateTopDiskID(1);
+                            moveDisk(diskID, 1, 2);
+                            System.out.println("(" + step + ") Move one disk from Tower 2 to Tower 3.");
+                        }
+                        cycle++;
+                    }
                 }
                 step++;
-                solve(step);
+                solve(step, cycle);
             }
         }
     }
+
+    /*
+    For an even number of disks:
+
+    1. make the legal move between pegs A and B (in either direction)
+    2. make the legal move between pegs A and C (in either direction)
+    3. make the legal move between pegs B and C (in either direction)
+    repeat until complete
+
+    For an odd number of disks:
+
+    1. make the legal move between pegs A and C (in either direction)
+    2. make the legal move between pegs A and B (in either direction)
+    3. make the legal move between pegs C and B (in either direction)
+    repeat until complete
+     */
 
     public boolean empty (int row) {
         int counter = 0;
@@ -60,6 +138,16 @@ public class Towers {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public boolean legal (int fromRow, int toRow) {
+        int fromRowID = locateTopDiskID(fromRow);
+        int toRowID = locateTopDiskID(toRow);
+        if (fromRowID > toRowID) {
+            return false;
+        } else {
+            return true;
         }
     }
 
