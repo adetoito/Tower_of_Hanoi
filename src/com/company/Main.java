@@ -20,48 +20,7 @@ public class Main {
             }
         }
         int diskID = disks;
-        int towers [][] = new int [3][disks];
-        for (int i = 0; i < towers.length; i++) {
-            for (int j = 0; j < towers[i].length; j++) {
-                towers[i][j] = -1; // -1 is an empty location.
-            }
-        }
-        for (int i = 0; i < towers[0].length; i++) {
-            towers[0][i] = diskID;
-            diskID--;
-        }
-        diskID = disks;
-        calculate(disks, diskID, towers);
-    }
-
-    public static void calculate (int disks, int diskID, int [][] towers) {
-        boolean incomplete = true;
-        int step = 1;
-        while (incomplete) {
-
-            towers = Move.moveDisk(towers, step);
-
-            // Everything before evaluating whether the task is complete or not.
-
-            if (empty(0, towers) && empty(1, towers) && !empty(2, towers)) {
-                incomplete = false;
-            }
-            System.out.println(step + ") ");
-            step++;
-        }
-    }
-
-    public static boolean empty (int row, int [][] towers) {
-        int counter = 0;
-        for (int i = 0; i < towers[row].length; i++) {
-            if (towers[row][i] == -1) {
-                counter++;
-            }
-        }
-        if (counter == towers[row].length) {
-            return true;
-        } else {
-            return false;
-        }
+        Towers game = new Towers(disks, diskID);
+        game.solve(1);
     }
 }
